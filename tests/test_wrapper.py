@@ -12,9 +12,13 @@ class TestRequestsWrapper(unittest.TestCase):
 
     def test_request_wrapper_post(self):
         request = RequestsWrapper()
-        payload = {"key": "value"}
-        res = request.post("https://httbin.org/post", data=payload, sleep_seconds=0)
-        self.assertEqual(res.status_code, 200)
+        payload = {"id": [1, 2, 3], "userId": 1}
+        res = request.post(
+            "https://jsonplaceholder.typicode.com/posts/",
+            params=payload,
+            sleep_seconds=0,
+        )
+        self.assertEqual(res.status_code, 201)
 
     def test_request_wrapper_hit_count(self):
         with RequestsWrapper() as RW:

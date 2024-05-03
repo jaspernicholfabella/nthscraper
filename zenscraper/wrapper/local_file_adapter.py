@@ -1,5 +1,6 @@
-import requests
 import os
+import io
+import sys
 from typing import Tuple
 from requests.adapters import BaseAdapter
 from requests.models import Response
@@ -42,14 +43,20 @@ class LocalFileAdapter(BaseAdapter):
 
         if response.status_code == 200 and request.method.lower() != "head":
             try:
-                file_handle = open(path, "rb")
-                response.raw = file_handle
+                with open(path, "rb") as file_handle:
+                    file_content = file_handle.read()
+                response.raw = io.BytesIO(file_content)
             except Exception as e:
                 response.status_code = 500
                 response.reason = str(e)
 
         response.request = request
         return response
+
+    def __enter__(self, *exc):
+        return self
+        logger.info(f"__exit__: {exc}")
+        self.session.close()
 
     def close(self) -> None:
         """Implement close method if needed for cleaning up resources."""

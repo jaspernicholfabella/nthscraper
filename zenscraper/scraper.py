@@ -49,6 +49,18 @@ class ZenElement:
         """Retrieve the combined text content of the HTML element."""
         return "".join(self.element.itertext())
 
+    def inner_html(self) -> str:
+        """Get the inner HTML of the element."""
+        return tostring(self.element, encoding="unicode", method="html")
+
+    def get_tag_name(self) -> str:
+        """Get the tag name of the element."""
+        return self.element.tag
+
+    def __str__(self):
+        """Representation of ZenElement object."""
+        return f"ZenElement: <{self.get_tag_name()}> element instance."
+
 
 class ZenScraper:
     """class to scrape websites following selenium-like rules"""
@@ -82,6 +94,7 @@ class ZenScraper:
         session = requests.session()
         session.mount("file://", LocalFileAdapter())
         self.response = session.get(f"file://{file_path}")
+        logger.info(f"Scraping data from: {file_path}")
         self.doc = (
             html.fromstring(self.response.content) if self.response.content else None
         )
@@ -101,7 +114,7 @@ class ZenScraper:
         err_message, xpath = selector_mode_values(by_mode, to_search, tag)
         doc = doc if doc else self.doc
 
-        if not doc:
+        if doc is None or len(doc) == 0:
             logger.error("Document is not loaded properly for xpath operations.")
             return []
         try:
@@ -120,7 +133,7 @@ class ZenScraper:
     ) -> "ZenElement":
         err_message, xpath = selector_mode_values(by_mode, to_search, tag)
         doc = doc if doc else self.doc
-        if not doc:
+        if doc is None or len(doc) == 0:
             raise ReferenceError("HTML Document is not a valid lxml object")
         try:
             element = doc.xpath(xpath)[0]

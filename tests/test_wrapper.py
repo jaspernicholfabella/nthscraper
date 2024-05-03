@@ -1,5 +1,8 @@
 import unittest
 from zenscraper.wrapper.requests_wrapper import RequestsWrapper
+from zenscraper.logger import setup_logger
+
+logger = setup_logger(file_log="", console_log=False)
 
 
 class TestRequestsWrapper(unittest.TestCase):

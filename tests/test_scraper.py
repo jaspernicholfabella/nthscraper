@@ -4,6 +4,9 @@ import requests
 from zenscraper.wrapper.local_file_adapter import LocalFileAdapter
 from zenscraper.scraper import ZenScraper
 from zenscraper.by import By
+from zenscraper.logger import setup_logger
+
+logger = setup_logger(file_log="", console_log=False)
 
 
 class TestLocalFileAdapter(unittest.TestCase):
@@ -46,12 +49,28 @@ class TestZenScraper(unittest.TestCase):
         )
         self.assertEqual(scraper.status_code, 200)
 
-    def test_scraping_text(self):
-        """Testing if text is properly extracted"""
+    def test_scraping_element(self):
+        """Testing if element is properly extracted"""
         self.scraper.get_from_local(f"{self.local_file_path}/tests/httpbin.html")
         element = self.scraper.find_element(By.XPATH, "//h2[@class='title']")
+        self.assertIn("h2", str(element))
 
-        self.assertIn("httpbin", element.get_text())
+    def test_scraping_elements(self):
+        """Testing if elements is properly extracted"""
+        self.scraper.get_from_local(f"{self.local_file_path}/tests/httpbin.html")
+        elements = self.scraper.find_elements(By.XPATH, "//div//a")
+
+        self.assertEqual(len(elements), 15)
+        for element in elements:
+            self.assertIn("<a>", str(element))
+
+
+class TestZenElement(unittest.TestCase):
+
+    def setUp(self):
+        self.scraper = ZenScraper()
+        self.local_file_path = os.path.abspath(os.path.curdir)
+        self.scraper.get_from(local(f"{self.local_file_path}/tests/httpbin.html"))
 
 
 if __name__ == "__main__":

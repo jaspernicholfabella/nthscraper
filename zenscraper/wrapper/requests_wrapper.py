@@ -33,20 +33,20 @@ class RequestsWrapper:
 
         self.web_hit_count += 1
         resp = self.session.request(method, url, headers=headers, **kwargs)
-        logger.info("Response: status_code=%i", resp.status_code)
-        logger.info("headers=%s", resp.request.headers)
-        logger.info("web_hit_count=%s", self.web_hit_count)
+        logger.info(f"Response: status_code={resp.status_code}")
+        logger.info(f"headers={resp.request.headers}")
+        logger.info(f"web_hit_count={self.web_hit_count}")
         resp.raise_for_status()
         return resp
 
     def get(self, url: str, **kwargs: Any):
         """Send a GET Request"""
-        logger.info("%s from: url=%s, kwargs=%s", "GET", url, kwargs)
+        logger.info(f"GET from: url={url}, kwargs={kwargs}")
         return self.request("GET", url, **kwargs)
 
     def post(self, url: str, **kwargs: Any):
         """Send a POST request"""
-        logger.info("%s from: url=%s, kwargs=%s", "POST", url, kwargs)
+        logger.info(f"POST from: url={url}, kwargs={kwargs}")
         return self.request("POST", url, **kwargs)
 
     def get_hit_count(self):

@@ -46,7 +46,7 @@ class TestFileUtilsWrapper(unittest.TestCase):
             htmldir="./tests/downloads_test",
             filename="test_utils_save_html_body_only",
             scraper=scraper,
-            body_only=True
+            body_only=True,
         )
 
         self.assertTrue(
@@ -55,3 +55,22 @@ class TestFileUtilsWrapper(unittest.TestCase):
                 + "/test_utils_save_html_body_only.html"
             )
         )
+
+    def test_utils_download_file(self):
+        """download a file"""
+        FileUtils().download_file(
+            "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf",
+            "./tests/downloads_test",
+            "pdf_download",
+            "pdf",
+        )
+
+        self.assertTrue(
+            os.path.exists(
+                os.path.abspath("./tests/downloads_test") + "/pdf_download.pdf"
+            )
+        )
+
+
+if __name__ == "__main__":
+    unittest.main()

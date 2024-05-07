@@ -1,19 +1,12 @@
 import os
-import re
-import glob
-import json
-import time
-import pandas as pd
 import argparse
-import requests
 
 from pathlib import Path
-from typing import Optional, Union, List
+from typing import Optional
 
 from zenscraper.logger import setup_logger
 from zenscraper.scraper import ZenScraper
 from zenscraper.by import By
-from zenscraper.wrapper.requests_wrapper import RequestsWrapper
 
 logger = setup_logger()
 
@@ -55,47 +48,71 @@ class FileUtils:
         with open(file_path, "w", encoding="utf-8") as file:
             file.write(output)
 
-    
-    def save_json(self, 
-                  jsondir:str,
-                  filename: str,
-                  jsondata:Optional[str] = None
-                  url:str = "",
-                  sleep_seconds_before: Optional[int] = None,
-                  sleep_seconds_after: Optional[int] = None):
+    def download_file(
+        self,
+        url: str,
+        filedir: str = "",
+        filename: str = "download",
+        filetype: str = "txt",
+        prefix: str = "",
+    ):
         """
-        Save JSON data from a URL or provided JSON data to a file in the specified
-        directory.
-
-        :param jsondir: Directory to save the JSON file.
-        :param filename: JSON Data from a string extracted
-        :param url: URL to fetch JSON data
-        :param sleep_seconds_before: Time to wait before making the request
-        :param sleep_aeconds_after: Time to wait after the requeat is made before saving
-        the file
+        Download a file from a URL and save it to a specified directory with a given
+        filename and filetype
         """
-        logger.info("Saving JSON file")
-        Path(os.path.abspath(jsondir)).mkdir(parents=True, exist_ok=True)
-        json_output = b""
+        # Build the full file path
+        file_path = Path(filedir) / f"{prefix}{filename}.{filetype}"
 
-        if url:
-            req = RequestsWrapper()
-            res = req.get(
-                url,
-                sleep_seconds=(
-                    sleep_seconds if sleep_seconds is not None else 0
-                ),
+        # Check if the file already exists
+        if file_path.exists():
+            logger.warning(f"File already exists: {file_path}. Skipping download.")
+            return
+
+        # Proceed with the download
+        response = requests.get(url, stream=True)
+
+        if response.status_code == 200:
+            logger.info(f"Downloading from: {url}")
+            Path(os.path.abspath(filedir)).mkdir(parents=True, exist_ok=True)
+            with open(file_path, "wb") as out_file:
+                for chunk in response.iter_content(chunk_size=1024):
+                    if chunk:
+                        out_file.write(chunk)
+            logger.info(f"Download success! File saved to {file_path}")
+        else:
+            logger.error(
+                f"Failed to download file, URL returned status code: {response.status_code}"
             )
-            time.sleep(wait_time)
-            json_output = res.content
-        elif json_data:
-            json_output = str.encode(json.dumps(json_data, indent=4))
 
-        file_path = Path(jsondir, f"{filename}.json")
-        try:
-            file_path.write_bytes(json_output)
-            logger.info("JSON file saved successfully.")
-        except Exception as e:
-            logger.error(f"Failed to save JSON file: {e}")
 
-        
+class ParserUtils:
+    @staticmethod
+    def check_dir_writable(outdir, exception=Exception) -> str:
+        """Return the outdir if it is writable, otherwise raise an exception"""
+        Path(os.path.abspath(f"{outdir}/raw")).mkdir(parents=True, exists_ok=True)
+        if os.access(outdir, os.W_OK) and os.path.isdir(outdir):
+            return outdir
+        raise exception(f"{outdir} is not writable or does not exist")
+
+    def get_parser(
+        self,
+        description="Collect data from websites",
+        formatter_class=argparse.ArgumentDefaultsHelpFormatter,
+    ):
+        """Create a common parer for input arguments"""
+        parser = argparse.ArgumentParser(
+            description=description, formatter_class=formatter_class
+        )
+
+        parser.add_argument(
+            "-r", "--run", action="store_true", help="Run the whole process"
+        )
+
+        parser.add_argument(
+            "-o",
+            "--outdir",
+            type=self.check_dir_writable,
+            help="Output directory to store the results",
+            required=True,
+        )
+        return parser

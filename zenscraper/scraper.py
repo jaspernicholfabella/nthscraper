@@ -1,11 +1,9 @@
-import os
-from urllib.request import url2pathname
 import random
 import requests
 from requests.models import Response
 from lxml import html
 from lxml.etree import _Element, tostring
-from typing import Tuple, Optional, List, Any
+from typing import Optional, List, Any
 from zenscraper.wrapper.requests_wrapper import RequestsWrapper
 from zenscraper.wrapper.local_file_adapter import LocalFileAdapter
 from zenscraper.by import By, selector_mode_values
@@ -45,17 +43,50 @@ class ZenElement:
             raise ValueError("Failed to find element.")
         return ZenElement(element)
 
-    def get_text(self) -> str:
-        """Retrieve the combined text content of the HTML element."""
-        return "".join(self.element.itertext())
-
-    def inner_html(self) -> str:
-        """Get the inner HTML of the element."""
-        return tostring(self.element, encoding="unicode", method="html")
+    def get_text(self, all_text_content: bool = True) -> str:
+        """
+        all_text_content: if True (default), return all the text content of the element
+        else return text content of the element (sub element excluded)
+        """
+        if all_text_content is True:
+            return "".join(self.element.itertext())
+        return self.element.text if self.element.text is not None else ""
 
     def get_tag_name(self) -> str:
         """Get the tag name of the element."""
         return self.element.tag
+
+    def get_attribute(
+        self, attribute: str, inner_text_filter: List[str] = ["\n", "\t"]
+    ) -> str:
+        """
+        Retrieve various attributes or data from an HTML element including innerText and innerHtml
+        :param attribute: Name of the attribute (e.g., 'class', 'id', 'innerText', 'innerHTML')
+        :param inner_text_filter: Filters to apply for filtering innerText,
+        :return: attributes as string
+        """
+        if attribute == "innerText":
+            text = self.get_text()
+            for rep in inner_text_filter:
+                text = text.replace(rep, "")
+            return text.strip()
+        if attribute == "innerHTML":
+            return tostring(self.element, encoding="unicode", method="html")
+
+        attr_value = self.element.get(attribute)
+        if attr_value is None:
+            raise ValueError(f"Error accessing the attribute {attribute}")
+
+        return attr_value
+
+    def get_parent(self) -> Optional["ZenElement"]:
+        parent = self.element.getparent()
+        return ZenElement(parent) if parent is not None else None
+
+    def get_children(self, tag_name: str = "*") -> List["ZenElement"]:
+        """Get children of elements filtered by tag name"""
+        children = self.element.findall(tag_name)
+        return [ZenElement(child) for child in children]
 
     def __str__(self):
         """Representation of ZenElement object."""

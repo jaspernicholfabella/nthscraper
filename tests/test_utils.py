@@ -5,7 +5,7 @@ from zenscraper.logger import setup_logger
 from zenscraper.utils import FileUtils
 from zenscraper.scraper import ZenScraper
 
-logger = setup_logger(file_log="", console_log=False)
+logger = setup_logger(log_file="", console_log=False)
 
 
 class TestFileUtilsWrapper(unittest.TestCase):
@@ -70,7 +70,3 @@ class TestFileUtilsWrapper(unittest.TestCase):
                 os.path.abspath("./tests/downloads_test") + "/pdf_download.pdf"
             )
         )
-
-
-if __name__ == "__main__":
-    unittest.main()

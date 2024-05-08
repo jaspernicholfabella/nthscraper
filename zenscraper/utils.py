@@ -1,5 +1,6 @@
 import os
 import argparse
+import requests
 
 from pathlib import Path
 from typing import Optional
@@ -14,6 +15,15 @@ logger = setup_logger()
 class FileUtils:
     """File utilities"""
 
+    @staticmethod
+    def create_directory(dir_name: str):
+        """Create a directory"""
+        if os.path.exists(Path(dir_name)):
+            pass
+        else:
+            logger.info(f"creating directory: {dir_name}")
+            Path(dir_name).mkdir(parents=True, exist_ok=True)
+
     def save_html(
         self,
         htmldir: str,
@@ -27,7 +37,7 @@ class FileUtils:
         direct URL.
         """
         logger.info("Saving HTML Files")
-        Path(os.path.abspath(htmldir)).mkdir(parents=True, exist_ok=True)
+        FileUtils().create_directory(htmldir)
 
         def _extract_html(zs: ZenScraper):
             if body_only:
@@ -73,7 +83,7 @@ class FileUtils:
 
         if response.status_code == 200:
             logger.info(f"Downloading from: {url}")
-            Path(os.path.abspath(filedir)).mkdir(parents=True, exist_ok=True)
+            FileUtils().create_directory(filedir)
             with open(file_path, "wb") as out_file:
                 for chunk in response.iter_content(chunk_size=1024):
                     if chunk:
@@ -86,11 +96,12 @@ class FileUtils:
 
 
 class ParserUtils:
+
     @staticmethod
     def check_dir_writable(outdir, exception=Exception) -> str:
         """Return the outdir if it is writable, otherwise raise an exception"""
-        Path(os.path.abspath(f"{outdir}/raw")).mkdir(parents=True, exists_ok=True)
-        if os.access(outdir, os.W_OK) and os.path.isdir(outdir):
+        FileUtils().create_directory(f"{outdir}/raw")
+        if os.path.isdir(outdir) and os.access(outdir, os.W_OK):
             return outdir
         raise exception(f"{outdir} is not writable or does not exist")
 
@@ -116,3 +127,12 @@ class ParserUtils:
             required=True,
         )
         return parser
+
+
+class EmailUtils:
+    def send_email(self, to, subject, body=None, files=None, cc=None):
+        """
+        Send email with attachment
+        msg = send_email(getpass.getuser(),)
+        """
+        pass

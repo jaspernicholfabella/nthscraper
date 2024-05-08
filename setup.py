@@ -13,8 +13,8 @@ setup(
     ],
     entry_points={
         "console_scripts": [
-            # if you have any scripts you want to be installed, e.g.,
-            # 'zenscraper=zenscraper:main'
+            # If you have any scripts you want to be installed, e.g.,
+            # 'zenscraper=zenscraper:main',
         ],
     },
 )

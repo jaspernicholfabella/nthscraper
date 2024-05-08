@@ -3,7 +3,7 @@ from zenscraper.wrapper.requests_wrapper import RequestsWrapper
 from zenscraper.logger import setup_logger
 from zenscraper.wrapper.row import Row
 
-logger = setup_logger(file_log="", console_log=False)
+logger = setup_logger(log_file="", console_log=False)
 
 
 class TestRequestsWrapper(unittest.TestCase):
@@ -68,7 +68,3 @@ class TestRow(unittest.TestCase):
         self.row.objectkey = self.row.compute_key()
         objectkey = "4a2b279bde333533a033c334f6b2dcbc7ff492a005e075b133072b0c2b40289b"
         self.assertEqual(self.row.objectkey.value, objectkey)
-
-
-if __name__ == "__main__":
-    unittest.main()

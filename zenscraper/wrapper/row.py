@@ -28,7 +28,7 @@ class RowFieldValue(str):
 class Row:
     def __init__(self, fields: List[str]):
         self._field_values = {}
-        self._init_field = fields
+        self._init_field: List[str] = fields
         self._fields = [self._normalize_field_name(field) for field in fields]
         for field in self._fields:
             self._field_values[field] = RowFieldValue()

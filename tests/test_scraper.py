@@ -6,7 +6,7 @@ from zenscraper.scraper import ZenScraper
 from zenscraper.by import By
 from zenscraper.logger import setup_logger
 
-logger = setup_logger(file_log="", console_log=False)
+logger = setup_logger(log_file="", console_log=False)
 
 
 class TestLocalFileAdapter(unittest.TestCase):
@@ -119,7 +119,3 @@ class TestZenElement(unittest.TestCase):
         element = self.scraper.find_element(By.TEXT, "Malakas")
         self.assertEqual(element.get_tag_name(), "p")
         self.assertEqual(element.get_attribute("id"), "sakalam")
-
-
-if __name__ == "__main__":
-    unittest.main()

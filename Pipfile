@@ -11,6 +11,7 @@ urllib3 = "*"
 
 [dev-packages]
 black = "*"
+setuptools = "*"
 
 [requires]
 python_version = "3.12"

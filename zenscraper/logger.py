@@ -1,9 +1,8 @@
 import logging
 from logging.handlers import RotatingFileHandler
-import sys
 
 
-def setup_logger(logging_level=logging.DEBUG, file_log="", console_log=True):
+def setup_logger(logging_level=logging.DEBUG, log_file="", console_log=True):
     """Set up and return a logger."""
     logger = logging.getLogger("zenscraper")
     logger.setLevel(logging_level)
@@ -12,10 +11,10 @@ def setup_logger(logging_level=logging.DEBUG, file_log="", console_log=True):
     for handler in logger.handlers[:]:
         logger.removeHandler(handler)
 
-    # Add file handler if file_log is provided
-    if file_log:
+    # Add file handler if log file is provided
+    if log_file:
         f_handler = RotatingFileHandler(
-            file_log, maxBytes=1024 * 1024 * 5, backupCount=5
+            log_file, maxBytes=1024 * 1024 * 5, backupCount=5
         )
         f_format = logging.Formatter(
             "%(asctime)s - %(name)s - %(levelname)s - %(message)s",

@@ -34,7 +34,7 @@ def retry(exception=Exception, tries: int = 1, init_wait: int = 60, factor: int 
     def retry_decorator(func):
         @functools.wraps(func)
         def retry_wrapper(*args, **kwargs):
-            fmsg = f"args={args if argse else ''}, kwargs = {kwargs}"
+            fmsg = f"args={args if args else ''}, kwargs = {kwargs}"
             for _try in range(tries):
                 try:
                     logger.info(f"Trying({_try+1}): func={func.__name__}")
@@ -42,11 +42,13 @@ def retry(exception=Exception, tries: int = 1, init_wait: int = 60, factor: int 
                     return func(*args, **kwargs)
                 except Exception as e:
                     _delay = (factor**_try) * init_wait
-                    if _try == tires - 1:
+                    if _try == tries - 1:
                         raise
                     logger.exception(e)
                     logger.info(
-                        f"Retrying on: func={func.__name__}, delay={_delay} seconds, exception={repr(e)}"
+                        f"""Retrying on: func={func.__name__},
+                        delay={_delay} seconds,
+                        exception={repr(e)}"""
                     )
                     time.sleep(_delay)
             return retry_wrapper

@@ -12,9 +12,6 @@ setup(
         "urllib3==2.2.1",
     ],
     entry_points={
-        "console_scripts": [
-            # If you have any scripts you want to be installed, e.g.,
-            # 'zenscraper=zenscraper:main',
-        ],
+            "console_scripts": ["zenscraper=zenscraper.cli:main"]
     },
 )

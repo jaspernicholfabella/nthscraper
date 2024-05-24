@@ -2,12 +2,20 @@ import os
 import argparse
 import requests
 
+# import re
+
 from pathlib import Path
 from typing import Optional
 
 from zenscraper.logger import setup_logger
 from zenscraper.scraper import ZenScraper
 from zenscraper.by import By
+
+# import smtplib
+# from email.message import EmailMessage
+# from email.mime.text import MIMEText
+# import email.mime.multipart import MIMEMultipart
+
 
 logger = setup_logger()
 
@@ -129,10 +137,62 @@ class ParserUtils:
         return parser
 
 
-class EmailUtils:
-    def send_email(self, to, subject, body=None, files=None, cc=None):
-        """
-        Send email with attachment
-        msg = send_email(getpass.getuser(),)
-        """
-        pass
+# class EmailUtils:
+#
+#
+#     def attach_file(msg: EmailMessage, file_path) -> EmailMessage:
+#         """
+#         Attach a file to an EmailMessage.
+#
+#         :param msg: EmailMessage instance
+#         :param file_path: Path to the file to be attached
+#         """
+#         file_path = Path(file_path)
+#         ctype, _ = mimetypes.guess_type(file_path)
+#         if ctype is None:
+#             ctype = "application/octet-stream"
+#
+#         maintype, subtype = ctype.split('/', 1)
+#
+#         logger.info(f"Add attachment: file={file_path}, maintype={maintype}, subtype={subtype}")
+#
+#         with open(file_path, "rb") as fp:
+#             msg.add_attachment(fp.read(), maintype=maintype, subtype=subtype, filename=file_path.name)
+#
+#         return msg
+#
+#     def send_email(to, subject, body=None, files=None, cc=None):
+#         """
+#         Send an email with optional attachments.
+#
+#         :param to: Email recipient
+#         :param subject: Email subject
+#         :param body: Email body
+#         :param files: List of file paths to attach
+#         :param cc: Email CC recipient
+#         """
+#         msg = MIMEMultipart()
+#         msg["Subject"] = subject
+#             msg["From"] = getpass.getuser()
+#             msg["To"] = to
+#             if cc:
+#                 msg["Cc"] = cc
+#
+#             logger.info("Add body")
+#             if body:
+#                 if re.search(r'^\s*<html', body, re.IGNORECASE):
+#                     msg.attach(MIMEText(body, "html"))
+#                 else:
+#                     msg.attach(MIMEText(body, "plain"))
+#
+#             logger.info("Add attachments")
+#             for file_path in files or []:
+#                 logger.info(f"Attach file: {file_path}")
+#                 self.attach_file(msg, file_path)
+#
+#             # Send the email
+#         logger.info(f"Sending email: {msg.as_string()}")
+#         with smtplib.SMTP("msa-hub") as server:
+#             server.send_message(msg)
+#
+#         return msg

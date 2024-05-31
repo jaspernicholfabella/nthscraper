@@ -7,12 +7,15 @@ name = "pypi"
 requests = "==2.31.0"
 lxml = "==5.2.1"
 pandas = "==2.2.2"
-urllib3 = "*"
-typer = "*"
+urllib3 = "==2.2.1"
+flask = "==3.0.3"
+flask-apscheduler = "==1.13.1"
+psutil = "==5.9.8"
+pyyaml = "==6.0.1"
 
 [dev-packages]
-black = "*"
-setuptools = "*"
+black = "==24.4.2"
+setuptools = "70.0.0"
 
 [requires]
 python_version = "3.12"

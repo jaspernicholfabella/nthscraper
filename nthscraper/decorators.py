@@ -1,4 +1,4 @@
-from zenscraper.logger import setup_logger
+from nthscraper.logger import setup_logger
 import functools
 import time
 

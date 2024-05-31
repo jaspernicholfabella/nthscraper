@@ -7,9 +7,9 @@ import requests
 from pathlib import Path
 from typing import Optional
 
-from zenscraper.logger import setup_logger
-from zenscraper.scraper import ZenScraper
-from zenscraper.by import By
+from nthscraper.logger import setup_logger
+from nthscraper.scraper import NthScraper
+from nthscraper.by import By
 
 # import smtplib
 # from email.message import EmailMessage
@@ -36,7 +36,7 @@ class FileUtils:
         self,
         htmldir: str,
         filename: str,
-        scraper: Optional[ZenScraper] = None,
+        scraper: Optional[NthScraper] = None,
         url: Optional[str] = None,
         body_only: bool = False,
     ):
@@ -47,7 +47,7 @@ class FileUtils:
         logger.info("Saving HTML Files")
         FileUtils().create_directory(htmldir)
 
-        def _extract_html(zs: ZenScraper):
+        def _extract_html(zs: NthScraper):
             if body_only:
                 body = zs.find_element(By.XPATH, "//body")
                 out = f"<html><body>{body}</body></html>" if body is not None else ""
@@ -58,7 +58,7 @@ class FileUtils:
         if scraper is not None:
             output = _extract_html(scraper)
         elif url is not None:
-            i_scraper = ZenScraper()
+            i_scraper = NthScraper()
             i_scraper.get(url, sleep_seconds=0)
             output = _extract_html(i_scraper)
 

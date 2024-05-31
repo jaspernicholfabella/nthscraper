@@ -1,10 +1,10 @@
-"""Requests Wrapper for the zenscraper library"""
+"""Requests Wrapper for the nthscraper library"""
 
 import time
 import random
 import requests
 from typing import Any
-from zenscraper.logger import setup_logger
+from nthscraper.logger import setup_logger
 
 
 logger = setup_logger()

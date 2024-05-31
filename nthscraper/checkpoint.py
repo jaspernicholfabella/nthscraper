@@ -1,7 +1,7 @@
 import csv
 import pickle
 from pathlib import Path
-from zenscraper.logger import setup_logger
+from nthscraper.logger import setup_logger
 from typing import List, Optional
 
 logger = setup_logger()

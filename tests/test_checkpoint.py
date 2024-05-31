@@ -1,5 +1,5 @@
 import unittest
-from zenscraper.checkpoint import Checkpoint
+from nthscraper.checkpoint import Checkpoint
 
 
 class TestCheckpoint(unittest.TestCase):

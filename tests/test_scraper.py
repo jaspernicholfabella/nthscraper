@@ -1,10 +1,10 @@
 import unittest
 import os
 import requests
-from zenscraper.wrapper.local_file_adapter import LocalFileAdapter
-from zenscraper.scraper import ZenScraper
-from zenscraper.by import By
-from zenscraper.logger import setup_logger
+from nthscraper.wrapper.local_file_adapter import LocalFileAdapter
+from nthscraper.scraper import NthScraper
+from nthscraper.by import By
+from nthscraper.logger import setup_logger
 
 logger = setup_logger(log_file="", console_log=False)
 
@@ -23,11 +23,11 @@ class TestLocalFileAdapter(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
 
 
-class TestZenScraper(unittest.TestCase):
+class TestNthScraper(unittest.TestCase):
     """tests to check scraping on a website"""
 
     def setUp(self):
-        self.scraper = ZenScraper()
+        self.scraper = NthScraper()
         self.local_file_path = os.path.abspath(os.path.curdir)
 
     def test_scraping_online_site(self):
@@ -65,7 +65,7 @@ class TestZenScraper(unittest.TestCase):
 class TestZenElement(unittest.TestCase):
 
     def setUp(self):
-        self.scraper = ZenScraper()
+        self.scraper = NthScraper()
         self.local_file_path = os.path.abspath(os.path.curdir)
         self.scraper.get_from_local(f"{self.local_file_path}/tests/test.html")
 

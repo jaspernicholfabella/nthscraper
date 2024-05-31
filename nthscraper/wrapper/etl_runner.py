@@ -5,8 +5,8 @@ import argparse
 import pandas as pd
 import logging
 from typing import Any, List
-from zenscraper.logger import setup_logger
-from zenscraper.utils import ParserUtils, FileUtils
+from nthscraper.logger import setup_logger
+from nthscraper.utils import ParserUtils, FileUtils
 
 
 class Runner:

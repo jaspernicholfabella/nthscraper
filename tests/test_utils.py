@@ -1,9 +1,9 @@
 import os
 import unittest
 
-from zenscraper.logger import setup_logger
-from zenscraper.utils import FileUtils
-from zenscraper.scraper import ZenScraper
+from nthscraper.logger import setup_logger
+from nthscraper.utils import FileUtils
+from nthscraper.scraper import NthScraper
 
 logger = setup_logger(log_file="", console_log=False)
 
@@ -13,7 +13,7 @@ class TestFileUtilsWrapper(unittest.TestCase):
 
     def test_utils_save_html(self):
         # test downloading using scraper
-        scraper = ZenScraper()
+        scraper = NthScraper()
         scraper.get("https://httpbin.org")
         FileUtils().save_html(
             htmldir="./tests/downloads_test",

@@ -1,0 +1,5 @@
+web:
+  host: '0.0.0.0' 
+  port: '5001'
+  check_ram_usage: True
+  check_cpu_usage: True

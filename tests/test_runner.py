@@ -2,7 +2,7 @@ import unittest
 import glob
 import os
 import subprocess
-from zenscraper.wrapper.etl_runner import Runner
+from nthscraper.wrapper.etl_runner import Runner
 
 
 class TestETLRunner(unittest.TestCase):

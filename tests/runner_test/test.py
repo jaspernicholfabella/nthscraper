@@ -5,11 +5,11 @@ from datetime import datetime
 from typing import Any
 
 
-from zenscraper.wrapper.row import Row
-from zenscraper.wrapper.etl_runner import Runner
-from zenscraper.scraper import ZenScraper
-from zenscraper.by import By
-from zenscraper.logger import setup_logger
+from nthscraper.wrapper.row import Row
+from nthscraper.wrapper.etl_runner import Runner
+from nthscraper.scraper import NthScraper
+from nthscraper.by import By
+from nthscraper.logger import setup_logger
 
 logger = setup_logger()
 
@@ -29,7 +29,7 @@ class TestRunner(Runner):
     def get_raw(self):
         """Get raw data from source"""
         logger.info("Getting the raw")
-        scraper = ZenScraper()
+        scraper = NthScraper()
         scraper.get_from_local(f"{os.path.abspath('./tests/test.html')}")
         element = scraper.find_element(By.XPATH, "//h2")
         self.out.fetch_date = self.fetch_date

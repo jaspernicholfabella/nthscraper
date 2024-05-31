@@ -1,7 +1,7 @@
 import unittest
-from zenscraper.wrapper.requests_wrapper import RequestsWrapper
-from zenscraper.logger import setup_logger
-from zenscraper.wrapper.row import Row
+from nthscraper.wrapper.requests_wrapper import RequestsWrapper
+from nthscraper.logger import setup_logger
+from nthscraper.wrapper.row import Row
 
 logger = setup_logger(log_file="", console_log=False)
 

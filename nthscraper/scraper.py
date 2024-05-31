@@ -4,16 +4,16 @@ from requests.models import Response
 from lxml import html
 from lxml.etree import _Element, tostring
 from typing import Optional, List, Any
-from zenscraper.wrapper.requests_wrapper import RequestsWrapper
-from zenscraper.wrapper.local_file_adapter import LocalFileAdapter
-from zenscraper.by import By, selector_mode_values
-from zenscraper.logger import setup_logger
+from nthscraper.wrapper.requests_wrapper import RequestsWrapper
+from nthscraper.wrapper.local_file_adapter import LocalFileAdapter
+from nthscraper.by import By, selector_mode_values
+from nthscraper.logger import setup_logger
 
 logger = setup_logger()
 
 
-class ZenElement:
-    """Represents an HTML element in the Zenscraper context."""
+class NthScraperElement:
+    """Represents an HTML element in the nthscraper context."""
 
     def __init__(self, element: _Element):
         if not isinstance(element, _Element):
@@ -22,26 +22,28 @@ class ZenElement:
 
     def find_elements(
         self, by_mode: "By", to_search: str, tag: str = "node()"
-    ) -> List["ZenElement"]:
+    ) -> List["NthScraperElement"]:
         """Find multiple elemnts within this element."""
         err_message, xpath = selector_mode_values(by_mode, to_search, tag)
         try:
             elements = self.element.xpath(xpath)
-            return [ZenElement(element) for element in elements] if elements else []
+            return (
+                [NthScraperElement(element) for element in elements] if elements else []
+            )
         except Exception:
             logger.error(f"{err_message}: {e}")
             return []
 
-    def find_element(self, by_mode: "By", to_search: str) -> "ZenElement":
+    def find_element(self, by_mode: "By", to_search: str) -> "NthScraperElement":
         """
-        Attempt to find an HTML element by XPATH or other methods and return it wrapped in a ZenElement
+        Attempt to find an HTML element by XPATH or other methods and return it wrapped in a NthScraperElement
         """
         _, xpath = selector_mode_values(by_mode, to_search)
         try:
             element = self.element.xpath(xpath)[0]
         except Exception:
             raise ValueError("Failed to find element.")
-        return ZenElement(element)
+        return NthScraperElement(element)
 
     def get_text(self, all_text_content: bool = True) -> str:
         """
@@ -79,21 +81,21 @@ class ZenElement:
 
         return attr_value
 
-    def get_parent(self) -> Optional["ZenElement"]:
+    def get_parent(self) -> Optional["NthScraperElement"]:
         parent = self.element.getparent()
-        return ZenElement(parent) if parent is not None else None
+        return NthScraperElement(parent) if parent is not None else None
 
-    def get_children(self, tag_name: str = "*") -> List["ZenElement"]:
+    def get_children(self, tag_name: str = "*") -> List["NthScraperElement"]:
         """Get children of elements filtered by tag name"""
         children = self.element.findall(tag_name)
-        return [ZenElement(child) for child in children]
+        return [NthScraperElement(child) for child in children]
 
     def __str__(self):
-        """Representation of ZenElement object."""
-        return f"ZenElement: <{self.get_tag_name()}> element instance."
+        """Representation of NthScraperElement object."""
+        return f"NthScraperElement: <{self.get_tag_name()}> element instance."
 
 
-class ZenScraper:
+class NthScraper:
     """class to scrape websites following selenium-like rules"""
 
     def __init__(self) -> None:
@@ -141,7 +143,7 @@ class ZenScraper:
         to_search: str,
         doc: Optional[html.HtmlElement] = None,
         tag: str = "node()",
-    ) -> List["ZenElement"]:
+    ) -> List["NthScraperElement"]:
         err_message, xpath = selector_mode_values(by_mode, to_search, tag)
         doc = doc if doc else self.doc
 
@@ -150,7 +152,9 @@ class ZenScraper:
             return []
         try:
             elements = doc.xpath(xpath)
-            return [ZenElement(element) for element in elements] if elements else []
+            return (
+                [NthScraperElement(element) for element in elements] if elements else []
+            )
         except Exception as e:
             logger.error(f"{err_message}: {e}")
             return []
@@ -161,15 +165,15 @@ class ZenScraper:
         to_search: str,
         doc: Optional[html.HtmlElement] = None,
         tag: str = "node()",
-    ) -> "ZenElement":
+    ) -> "NthScraperElement":
         err_message, xpath = selector_mode_values(by_mode, to_search, tag)
         doc = doc if doc else self.doc
         if doc is None or len(doc) == 0:
             raise ReferenceError("HTML Document is not a valid lxml object")
         try:
             element = doc.xpath(xpath)[0]
-            return ZenElement(element)
+            return NthScraperElement(element)
         except Exception:
             raise ValueError("Failed to find Element")
 
-        return ZenElement(element)
+        return NthScraperElement(element)

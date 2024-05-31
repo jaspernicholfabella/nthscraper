@@ -1,2 +1,4 @@
-# zenscraper
-This is a simple scraper library using requests and lxml
+# nthscraper
+A python scraper library where you can create scraping bots and automation bots. 
+
+still on the works

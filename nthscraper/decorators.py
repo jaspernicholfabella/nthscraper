@@ -1,6 +1,8 @@
-from nthscraper.logger import setup_logger
+"""nthscraper decorators"""
+
 import functools
 import time
+from nthscraper.logger import setup_logger
 
 logger = setup_logger()
 

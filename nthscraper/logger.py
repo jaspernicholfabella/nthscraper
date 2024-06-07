@@ -1,3 +1,5 @@
+"""global script for logging"""
+
 import logging
 from logging.handlers import RotatingFileHandler
 

@@ -1,0 +1,9 @@
+jobs:
+  cpujob:
+    func: "utils:log_cpu_usage"
+    trigger: "interval"
+    seconds: 5
+  ramjob:
+    func: "utils:log_ram_usage"
+    trigger: "interval"
+    seconds: 2

@@ -61,7 +61,6 @@ class TestNthScraper(unittest.TestCase):
         for element in elements:
             self.assertIn("<a>", str(element))
 
-
 class TestZenElement(unittest.TestCase):
 
     def setUp(self):

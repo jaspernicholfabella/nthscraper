@@ -10,7 +10,3 @@ def log_ram_usage():
 def log_cpu_usage():
     with open("log_cram.txt", "a+") as f:
         f.write(f"CPU USAGE {dt.datetime.now()}: {psutil.cpu_percent()}%\n")
-
-
-def print_message(message):
-    print("Message:", message)

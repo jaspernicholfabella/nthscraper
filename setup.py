@@ -13,7 +13,7 @@ setup(
         "flask==3.0.3",
         "flask-apscheduler==1.13.1",
         "psutil==5.9.8",
-        "pyyaml==6.0.1" "",
+        "pyyaml==6.0.1",
     ],
     entry_points={"console_scripts": ["nthscraper=nthscraper.cli:main"]},
 )
